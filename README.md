@@ -82,11 +82,9 @@ Note: the false positive and true positive rates are computed on the same datase
 
 ## Business Impact Estimation
 
-Using the optimized threshold, the expected cost was extrapolated to a yearly basis, resulting in an estimated loss on the order of millions of dollars.
+Using the optimized threshold, the expected cost was extrapolated to a yearly basis, resulting in an estimated loss on the order of millions of dollars. This estimation assumes the sample of transactions is representative of the typical yearly transaction volume for European cardholders, though it likely represents only a subset of all European cardholder transactions. At a larger scale—such as major financial institutions with significantly higher daily transaction volumes—this cost could grow substantially. For example, while this dataset covers just two days' worth of transactions, institutions processing millions of transactions daily could face even higher potential costs from false positives and false negatives.
 
 This highlights that even well-performing models leave significant residual cost, due to the inherent trade-off between missed fraud and false positives.
-
-At larger scale (e.g. major financial institutions with significantly higher transaction volumes), this cost can grow substantially, emphasizing the importance of continuous optimization and robust fraud strategies.
 
 ---
 
