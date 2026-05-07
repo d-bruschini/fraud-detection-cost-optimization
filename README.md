@@ -37,54 +37,29 @@ To run this project, download the dataset and place it locally, then run the not
 
 ---
 
-### 3. Evaluation Strategy
+### 3. Cost-Sensitive Optimization and Evaluation Strategy (Key Contribution)
 
-Instead of relying solely on ROC AUC, the project emphasizes:
+The goal is to find the combination of model and threshold that minimizes the average per-transaction cost taking into account:
 
 * Precision–Recall trade-offs
 * Impact of class imbalance
 * Model stability across folds
 
----
-
-### 4. Cost-Sensitive Optimization (Key Contribution)
-
-A decision threshold was selected based on **expected business cost**, incorporating:
-
-* Cost of missed fraud (false negatives)
-* Cost of blocking legitimate users (false positives)
-
-This reflects how fraud systems operate in practice:
-
-> selecting operating points based on business impact, not just model scores.
-
----
-
-## Results & Insights
-
-* Model performance alone (e.g. ROC AUC) is not sufficient to determine the optimal decision strategy 
-* Cost-based threshold optimization provides a more realistic framework for decision-making 
-* Poor threshold selection can lead to suboptimal results, even with powerful models
-
-A final operating point was selected based on minimizing expected cost, balancing fraud detection and false positives.
+The choice of the model and threshold was performed using k-fold validation using the per-transaction cost at minimum, balancing fraud detection and false positives. For each fold, the dataset is split in three components, one used only to train the model, one used only to select the threshold, the last one used to assess the cost due to both the threshold and the model. The model and threshold which give the lowest average cost and/or standard deviation are chosen. Finally, the per-transaction cost, the true positive rate and the false positive rate are computed using an holdout dataset.
 
 ---
 
 ## Final Decision
 
 * Selected model: Logistic Regression (chosen for stability and interpretability)
-* Decision threshold: optimized using cost-based objective. 0.95 found to minimize cost, with a true positive rate of 82% and a false positive rate of 0.1%
+* Decision threshold: optimized using cost-based objective. 0.957 found to minimize cost, with a true positive rate of 81% and a false positive rate of 0.2%
 * Strategy: prioritize reduction of high-impact fraud while controlling false positives
-
-Note: the false positive and true positive rates are computed on the same dataset used for threshold optimization, and are therefore slightly optimistic.
 
 ---
 
 ## Business Impact Estimation
 
 Using the optimized threshold, the expected cost was extrapolated to a yearly basis, resulting in an estimated loss on the order of millions of dollars. This estimation assumes the sample of transactions is representative of the typical yearly transaction volume for European cardholders, though it likely represents only a subset of all European cardholder transactions. At a larger scale—such as major financial institutions with significantly higher daily transaction volumes—this cost could grow substantially. For example, while this dataset covers just two days' worth of transactions, institutions processing millions of transactions daily could face even higher potential costs from false positives and false negatives.
-
-This highlights that even well-performing models leave significant residual cost, due to the inherent trade-off between missed fraud and false positives.
 
 ---
 
@@ -100,7 +75,7 @@ This highlights that even well-performing models leave significant residual cost
 
 * Incorporate behavioral features (e.g. transaction velocity, user-level aggregates)
 * Compare against rule-based baselines
-* Optimize model and threshold jointly using cost-based metrics
+* Investigate how to reduce fluctuations and reduce cost (for example, probability calibration, assess sensitivity of probabilities to threshold, etc.)
 * Extend to real-time decision systems with monitoring for concept drift
 
 ---
@@ -109,13 +84,4 @@ This highlights that even well-performing models leave significant residual cost
 
 * Python (Pandas, NumPy, Scikit-learn)
 * Jupyter Notebook
-
----
-
-## Key Takeaways
-
-This project demonstrates that in fraud detection:
-
-* **Decision optimization under uncertainty and cost constraints is as important as model accuracy.**
-* **Even well-performing models leave significant residual cost, due to the inherent trade-off between missed fraud and false positives.**
 
