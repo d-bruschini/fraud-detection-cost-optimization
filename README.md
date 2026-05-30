@@ -19,6 +19,21 @@ To run this project, download the dataset and place it locally, then run the not
 
 ---
 
+## How to run this notebook
+
+python3 is required. You have to setup the environment by doing:
+
+```
+git clone https://github.com/d-bruschini/fraud-detection-cost-optimization.git
+cd fraud-detection-cost-optimization
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 -m ipykernel install --user --name=fraud-detection --display-name "Python 3 (.venv fraud-detection)"
+```
+and you select kernel "Python 3 (.venv fraud-detection)" when running the notebook in Jupyter.
+
+---
+
 ## Approach
 
 ### 1. Exploratory Data Analysis
@@ -51,9 +66,15 @@ The choice of the model and threshold was performed using k-fold validation usin
 
 ## Final Decision
 
-* Selected model: Logistic Regression (chosen for stability and interpretability)
-* Decision threshold: optimized using cost-based objective. 0.957 found to minimize cost, with a true positive rate of 81% and a false positive rate of 0.2%
+* Selected model: XGBoost (returns best performance, i.e. lowest cost per transaction)
+* Decision threshold: optimized using cost-based objective, with a true positive rate of 81% and a false positive rate of 0.03%
 * Strategy: prioritize reduction of high-impact fraud while controlling false positives
+
+The final model is trained on all of the data used in the k-fold validation used to select the model and the threshold, after both have been chosen (the numbers above are, of course, still derived only on the holdout set). This should result in less overfitting overall, as more data is used in the training.
+
+One thing that was found is that thresholds to minimize costs varied significantly from one fold to the next one, which might result in worse performance on the holdout set. This could be improved by calibrating the probabilities returned by each of the algorithms, which should make the thresholds more stable. 
+
+**Note**: in the previous version of this project, logistic regression was chosen, because no difference in performance was found. However, after fixing a bug in the definition of the time periodicity, and explicitly indicating the stratify parameter in train\_test\_split, it was found that XGBoost performs better.
 
 ---
 
