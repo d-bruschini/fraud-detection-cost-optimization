@@ -26,11 +26,12 @@ python3 is required. You have to setup the environment by doing:
 ```
 git clone https://github.com/d-bruschini/fraud-detection-cost-optimization.git
 cd fraud-detection-cost-optimization
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python3 -m ipykernel install --user --name=fraud-detection --display-name "Python 3 (.venv fraud-detection)"
 ```
-and you select kernel "Python 3 (.venv fraud-detection)" when running the notebook in Jupyter.
+and you select kernel "Python 3 (.venv fraud-detection)" when running the notebook in Jupyter. You also have to download the data from [here](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) and put it in a folder (in the notebook the folder is data/, but you can edit it as preferred)
 
 ---
 
@@ -103,6 +104,6 @@ Using the optimized threshold, the expected cost was extrapolated to a yearly ba
 
 ## Tech Stack
 
-* Python (Pandas, NumPy, Scikit-learn)
+* Python (Pandas, NumPy, Scikit-learn, XGBoost)
 * Jupyter Notebook
 
